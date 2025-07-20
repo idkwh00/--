@@ -1,7 +1,5 @@
 import argparse
-import json
 import csv
-import xml.etree.ElementTree as ET
 import matplotlib.pyplot as plt
 import os
 
@@ -13,49 +11,13 @@ def parse_file(filename):
     y = []
     
     try:
-        if ext == '.json':
-            with open(filename) as f:
-                data = json.load(f)
-                if 'data' in data: 
-                    for item in data['data']:
-                        x.append(item['x'])
-                        y.append(item['y'])
-                else:  
-                    x = data['x']
-                    y = data['y']
-        
-        elif ext == '.csv':
-            with open(filename) as f:
+        if ext == '.csv':
+           with open(filename) as f:
                 reader = csv.reader(f)
                 next(reader) 
                 for row in reader:
                     x.append(float(row[1]))
                     y.append(float(row[2]))
-        
-        elif ext == '.txt':
-            with open(filename) as f:
-                for line in f:
-                    parts = line.strip().split('    ')
-                    if len(parts) == 2:
-                        x.append(float(parts[0]))
-                        y.append(float(parts[1]))
-        
-        elif ext == '.xml':
-            tree = ET.parse(filename)
-            root = tree.getroot()
-            
-            
-            if root.find('xdata') is not None: 
-                xdata = root.find('xdata')
-                ydata = root.find('ydata')
-                for xval in xdata.findall('x'):
-                    x.append(float(xval.text))
-                for yval in ydata.findall('y'):
-                    y.append(float(yval.text))
-            else: 
-                for row in root.findall('row'):
-                    x.append(float(row.find('x').text))
-                    y.append(float(row.find('y').text))
     
     except Exception as e:
         print(f"Ошибка при чтении файла: {e}")
@@ -113,25 +75,11 @@ def main():
     parser = argparse.ArgumentParser(description='Программа для построения графиков из файлов данных')
     
 
-    parser.add_argument('filename', help='Имя файла с данными (txt, csv, json, xml)')
+    parser.add_argument('filename', help='Имя файла с данными')
     
     parser.add_argument('--legend', help='Текст для легенды на графике')
     
-    parser.add_argument('--title', help='Заголовок графика')
-    parser.add_argument('--xlabel', help='Подпись оси X')
-    parser.add_argument('--ylabel', help='Подпись оси Y')
-    parser.add_argument('--xlim', nargs=2, type=float, help='Границы оси X (min max)')
-    parser.add_argument('--ylim', nargs=2, type=float, help='Границы оси Y (min max)')
-    parser.add_argument('--xticks', nargs='+', type=float, help='Позиции меток на оси X')
-    parser.add_argument('--yticks', nargs='+', type=float, help='Позиции меток на оси Y')
-    parser.add_argument('--linestyle', choices=['solid', 'dashed', 'dotted'], help='Стиль линии')
-    parser.add_argument('--linewidth', type=float, help='Толщина линии')
-    parser.add_argument('--color', help='Цвет линии')
-    parser.add_argument('--grid', action='store_true', help='Включить сетку')
-    parser.add_argument('--no-grid', dest='grid', action='store_false', help='Выключить сетку')
-    parser.add_argument('--fill', action='store_true', help='Заливка под кривой')
     parser.add_argument('--output', help='Имя файла для сохранения графика')
-    parser.add_argument('--figsize', nargs=2, type=float, help='Размер графика (ширина высота)')
     
     args = parser.parse_args()
 
