@@ -16,7 +16,7 @@ y_values = []
 x = x_start
 while x <= x_end:
     try:
-        y = 100 * math.sqrt(A - 0.01 * x**2) + 0.01 * x + 10
+        y = 100 * math.sqrt(abs(A - 0.01 * x**2)) + 0.01 * x + 10
         results.append((x, y))
         x_values.append(x)
         y_values.append(y)
