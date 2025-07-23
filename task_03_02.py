@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 
 def f(x1, x2):
-    return 100 * np.sqrt(x2 - 0.01 * x1**2) + 0.01 * x2 + 10
+    return 100 * np.sqrt(abs(x2 - 0.01 * x1**2)) + 0.01 * abs(x1 + 10)
 
 x1_min, x1_max = -15.0, -5.0
 x2_min, x2_max = -3.0, 3.0
